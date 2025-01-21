@@ -4,11 +4,11 @@ plugins {
 
 android {
     namespace = "com.firebase.example.internal"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 16
-        targetSdk = 34
+        targetSdk = 35
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    api("com.google.android.material:material:1.9.0")
-    api("androidx.recyclerview:recyclerview:1.3.2")
-    api("androidx.constraintlayout:constraintlayout:2.1.4")
+    api("com.google.android.material:material:1.12.0")
+    api("androidx.recyclerview:recyclerview:1.4.0")
+    api("androidx.constraintlayout:constraintlayout:2.2.0")
 }
