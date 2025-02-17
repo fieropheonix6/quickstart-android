@@ -1,14 +1,15 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
-    id("com.android.application") version "8.1.3" apply false
-    id("com.android.library") version "8.1.3" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.20" apply false
-    id("com.google.gms.google-services") version "4.4.0" apply false
-    id("com.google.firebase.crashlytics") version "2.9.9" apply false
+    id("com.android.application") version "8.8.1" apply false
+    id("com.android.library") version "8.8.1" apply false
+    id("org.jetbrains.kotlin.android") version "2.1.10" apply false
+    id("com.google.gms.google-services") version "4.4.2" apply false
+    id("com.google.firebase.crashlytics") version "3.0.3" apply false
     id("com.google.firebase.firebase-perf") version "1.4.2" apply false
-    id("androidx.navigation.safeargs") version "2.7.5" apply false
-    id("com.github.ben-manes.versions") version "0.49.0" apply true
+    id("androidx.navigation.safeargs") version "2.8.7" apply false
+    id("com.github.ben-manes.versions") version "0.52.0" apply true
+    id("org.jetbrains.kotlin.plugin.compose") version "2.1.10" apply false
 }
 
 allprojects {
@@ -54,6 +55,10 @@ tasks.register<JavaExec>("ktlintCheck") {
     jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
 }
 
+fun notFromFirebase(candidate: ModuleComponentIdentifier): Boolean {
+    return candidate.group != "com.google.firebase"
+}
+
 fun isNonStable(candidate: ModuleComponentIdentifier): Boolean {
     return listOf("alpha", "beta", "rc", "snapshot", "-m", "final").any { keyword ->
         keyword in candidate.version.lowercase()
@@ -65,7 +70,9 @@ fun isBlockListed(candidate: ModuleComponentIdentifier): Boolean {
             "androidx.browser:browser",
             "com.facebook.android",
             "com.google.guava",
-            "com.github.bumptech.glide"
+            "com.github.bumptech.glide",
+            "com.google.android.gms",
+            "com.google.firebase:firebase-functions" // TODO(thatfiredev): remove once https://github.com/firebase/firebase-android-sdk/issues/6522 is fixed
     ).any { keyword ->
         keyword in candidate.toString().lowercase()
     }
@@ -73,7 +80,7 @@ fun isBlockListed(candidate: ModuleComponentIdentifier): Boolean {
 
 tasks.withType<DependencyUpdatesTask> {
     rejectVersionIf {
-        isNonStable(candidate) || isBlockListed(candidate)
+        (isNonStable(candidate) && notFromFirebase(candidate)) || isBlockListed(candidate)
     }
 }
 

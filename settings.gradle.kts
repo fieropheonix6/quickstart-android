@@ -13,6 +13,7 @@ include(":admob:app",
         ":config:app",
         ":crash:app",
         ":database:app",
+        ":dataconnect:app",
         ":dynamiclinks:app",
         ":firestore:app",
         ":functions:app",
@@ -22,5 +23,6 @@ include(":admob:app",
         ":inappmessaging:app",
         ":messaging:app",
         ":perf:app",
-        ":storage:app"
+        ":storage:app",
+        ":vertexai:app"
 )
